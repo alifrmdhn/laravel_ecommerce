@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('processor');
             $table->string('memory');
             $table->string('storage');
-            $table->unsignedBigInteger('product_id');
             $table->timestamps();
         });
     }

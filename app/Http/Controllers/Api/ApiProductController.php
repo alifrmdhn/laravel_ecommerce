@@ -14,8 +14,7 @@ class ApiProductController extends Controller
      */
     public function index()
     {
-        $prods = Product::with('variants')->get();
-
+        $prods = Product::all();
         return response()->json($prods, 200);
     }
 
@@ -34,6 +33,10 @@ class ApiProductController extends Controller
     {
         $validateProduct = Validator::make($request->all(),[
             'name' => 'required|min:4',
+            'description' => 'required',
+            'processor' => 'required',
+            'memory' => 'required',
+            'storage' => 'required',
             'price' => 'required|integer|min:1000000'
         ]);
 
@@ -42,18 +45,22 @@ class ApiProductController extends Controller
                 'status' => false,
                 'message' => "Error validation",
                 'errors' => $validateProduct->errors()
-            ],200);
+            ], 200);
         }
 
         $prod = new Product;
-	    $prod->name = $request->name;
-	    $prod->price = $request->price;
-	    $prod->save();
+        $prod->name = $request->name;
+        $prod->description = $request->description;
+        $prod->processor = $request->processor;
+        $prod->memory = $request->memory;
+        $prod->storage = $request->storage;
+        $prod->price = $request->price;
+        $prod->save();
 
         return response()->json([
             'status' => true,
-            'message' => 'Saved succesffuly'
-        ],201);
+            'message' => 'Saved successfully'
+        ], 201);
     }
 
     /**
@@ -62,7 +69,6 @@ class ApiProductController extends Controller
     public function show(string $id)
     {
         $prod = Product::find($id);
-
         return response()->json($prod, 200);
     }
 
@@ -79,16 +85,36 @@ class ApiProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validateProduct = Validator::make($request->all(),[
+            'name' => 'required|min:4',
+            'description' => 'required',
+            'processor' => 'required',
+            'memory' => 'required',
+            'storage' => 'required',
+            'price' => 'required|integer|min:1000000'
+        ]);
+
+        if($validateProduct->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => "Error validation",
+                'errors' => $validateProduct->errors()
+            ], 200);
+        }
+
         $prod = Product::find($id);
-	    $prod->name = $request->name;
-	    $prod->price = $request->price;
-	    $prod->save();
+        $prod->name = $request->name;
+        $prod->description = $request->description;
+        $prod->processor = $request->processor;
+        $prod->memory = $request->memory;
+        $prod->storage = $request->storage;
+        $prod->price = $request->price;
+        $prod->save();
 
         return response()->json([
             'status' => true,
             'message' => 'Edit success'
-        ],201);
-
+        ], 201);
     }
 
     /**
@@ -102,12 +128,12 @@ class ApiProductController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Delete success'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'Delete Error'
-            ],200);
+            ], 200);
         }
     }
 }

@@ -9,7 +9,14 @@ use App\Models\Variant;
 class Product extends Model
 {
     use HasFactory;
-    public function variants() {
-        return $this->hasMany(Variant::class);
-    }
+
+    protected $fillable = [
+        'name',
+        'description',
+        'rocessor',
+        'memory',
+        'storage',
+        'price',
+    ];
+    
 }

@@ -24,9 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'registerUser']);
 Route::post('/login', [AuthController::class, 'loginUser']);
 
-Route::get('product', [ProductController::class, 'index']);
-
 Route::middleware('auth:sanctum')->group(function() {
-    Route::resource('/products' , ApiProductController::class);
+    Route::resource('/products-token' , ApiProductController::class);
 });
+
+Route::resource('/products' , ApiProductController::class);
 
